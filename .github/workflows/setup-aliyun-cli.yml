@@ -16,8 +16,6 @@ jobs:
 
       - name: Use action
         uses: ./setup-aliyun-cli
-        with:
-          version: latest
 
       - name: Verify
         shell: bash

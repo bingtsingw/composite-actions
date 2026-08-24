@@ -1,22 +1,37 @@
 name: Setup Alibaba Cloud CLI
-description: Download Alibaba Cloud CLI for Ubuntu and add it to PATH
-
-inputs:
-  version:
-    description: Alibaba Cloud CLI version to install
-    required: false
-    default: latest
+description: Download Alibaba Cloud CLI 3.4.11 for Ubuntu and add it to PATH
 
 runs:
   using: composite
   steps:
+    - name: Restore Alibaba Cloud CLI cache
+      id: cache
+      uses: actions/cache@v5
+      with:
+        path: ${{ runner.temp }}/aliyun-cli.tgz
+        key: aliyun-cli-linux-amd64-3.4.11
+
     - name: Install Alibaba Cloud CLI
+      if: steps.cache.outputs.cache-hit != 'true'
       shell: bash
-      env:
-        ALIYUN_VERSION: ${{ inputs.version }}
       run: |
-        curl -fsSL "https://aliyuncli.alicdn.com/aliyun-cli-linux-$ALIYUN_VERSION-amd64.tgz" \
+        curl -fsSL "https://aliyuncli.alicdn.com/aliyun-cli-linux-3.4.11-amd64.tgz" \
           -o "$RUNNER_TEMP/aliyun-cli.tgz"
+
+    - name: Verify Alibaba Cloud CLI archive
+      shell: bash
+      run: |
+        printf '%s  %s\n' \
+          'a7e3df497db14c10d4d7587795e9fa7849b0c51dfce02908b9de5a41fe717d5c' \
+          "$RUNNER_TEMP/aliyun-cli.tgz" | sha256sum --check --status
+
+    - name: Extract Alibaba Cloud CLI
+      shell: bash
+      run: |
         mkdir -p "$RUNNER_TEMP/aliyun-cli"
         tar -xzf "$RUNNER_TEMP/aliyun-cli.tgz" -C "$RUNNER_TEMP/aliyun-cli"
+
+    - name: Add Alibaba Cloud CLI to PATH
+      shell: bash
+      run: |
         echo "$RUNNER_TEMP/aliyun-cli" >> "$GITHUB_PATH"

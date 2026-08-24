@@ -13,8 +13,8 @@ Sets up Bun, Node.js, and pnpm, then installs dependencies by default.
 pnpm caching is enabled automatically when `cache-dependency-path` (default:
 `**/pnpm-lock.yaml`) matches a lockfile. If there is no lockfile, Node.js is
 still set up and the cache is skipped; this is useful for repositories that
-only test the action itself. To disable installation as well, set
-`run-install: 'false'`.
+only test the action itself. Installation uses `--frozen-lockfile`, so set
+`run-install: 'false'` when there is no lockfile.
 
 ## `setup-aliyun-cli`
 
@@ -24,8 +24,7 @@ the runner's temporary directory, and adds it to `PATH`. It is intended for
 
 ```yaml
 - uses: bingtsingw/composite-actions/setup-aliyun-cli@main
-  with:
-    version: '3.4.11'
 ```
 
-`version` defaults to `latest`. Pin a version in production workflows.
+Installs and caches Alibaba Cloud CLI 3.4.11. The archive is verified against
+the SHA-256 value published with the [official release](https://github.com/aliyun/aliyun-cli/releases/tag/v3.4.11).
