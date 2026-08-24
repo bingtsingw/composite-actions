@@ -11,7 +11,7 @@ runs:
   steps:
     - name: Restore Alibaba Cloud CLI cache
       id: cache
-      uses: actions/cache@v5
+      uses: actions/cache@v6
       with:
         path: ${{ runner.temp }}/aliyun-cli.tgz
         key: aliyun-cli-linux-amd64-3.4.11
