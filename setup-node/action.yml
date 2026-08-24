@@ -37,22 +37,16 @@ runs:
     - if: ${{ inputs.pnpm-version == '' }}
       uses: pnpm/action-setup@v6
 
-    # setup-node requires a lockfile to create a pnpm cache key. Repositories
-    # that use this action only to set up the toolchain may not have one.
-    - name: Setup Node.js with pnpm cache
-      if: ${{ hashFiles(inputs.cache-dependency-path) != '' }}
-      uses: actions/setup-node@v7
-      with:
-        node-version: ${{ inputs.node-version }}
-        cache: pnpm
-        cache-dependency-path: ${{ inputs.cache-dependency-path }}
-
     - name: Setup Node.js
-      if: ${{ hashFiles(inputs.cache-dependency-path) == '' }}
       uses: actions/setup-node@v7
       with:
         node-version: ${{ inputs.node-version }}
+        # Caching needs a lockfile. Disable setup-node's automatic npm cache
+        # when this composite action is used without one.
+        cache: ${{ hashFiles(inputs.cache-dependency-path) != '' && 'pnpm' || '' }}
+        cache-dependency-path: ${{ inputs.cache-dependency-path }}
+        package-manager-cache: false
 
     - if: ${{ inputs.run-install == 'true' }}
-      run: pnpm install
+      run: pnpm install --frozen-lockfile
       shell: bash
