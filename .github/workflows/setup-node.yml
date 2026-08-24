@@ -18,6 +18,7 @@ jobs:
         uses: ./setup-node
         with:
           pnpm-version: '11'
+          run-install: 'false'
 
       - name: Test
         run: |
