@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  run:
+  warm-cache:
     runs-on: ubuntu-latest
 
     steps:
@@ -20,4 +20,22 @@ jobs:
       - name: Verify
         shell: bash
         run: |
+          aliyun version
+
+  verify-cache:
+    needs: warm-cache
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v7
+
+      - name: Use action
+        id: setup
+        uses: ./setup-aliyun-cli
+
+      - name: Verify cache and CLI
+        shell: bash
+        run: |
+          test "${{ steps.setup.outputs.cache-hit }}" = 'true'
           aliyun version

@@ -28,3 +28,4 @@ the runner's temporary directory, and adds it to `PATH`. It is intended for
 
 Installs and caches Alibaba Cloud CLI 3.4.11. The archive is verified against
 the SHA-256 value published with the [official release](https://github.com/aliyun/aliyun-cli/releases/tag/v3.4.11).
+The `cache-hit` output is `true` when the archive was restored from cache.

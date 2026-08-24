@@ -1,6 +1,11 @@
 name: Setup Alibaba Cloud CLI
 description: Download Alibaba Cloud CLI 3.4.11 for Ubuntu and add it to PATH
 
+outputs:
+  cache-hit:
+    description: Whether the Alibaba Cloud CLI archive was restored from cache
+    value: ${{ steps.cache.outputs.cache-hit }}
+
 runs:
   using: composite
   steps:
