@@ -1,0 +1,22 @@
+name: Setup Alibaba Cloud CLI
+description: Download Alibaba Cloud CLI for Ubuntu and add it to PATH
+
+inputs:
+  version:
+    description: Alibaba Cloud CLI version to install
+    required: false
+    default: latest
+
+runs:
+  using: composite
+  steps:
+    - name: Install Alibaba Cloud CLI
+      shell: bash
+      env:
+        ALIYUN_VERSION: ${{ inputs.version }}
+      run: |
+        curl -fsSL "https://aliyuncli.alicdn.com/aliyun-cli-linux-$ALIYUN_VERSION-amd64.tgz" \
+          -o "$RUNNER_TEMP/aliyun-cli.tgz"
+        mkdir -p "$RUNNER_TEMP/aliyun-cli"
+        tar -xzf "$RUNNER_TEMP/aliyun-cli.tgz" -C "$RUNNER_TEMP/aliyun-cli"
+        echo "$RUNNER_TEMP/aliyun-cli" >> "$GITHUB_PATH"
